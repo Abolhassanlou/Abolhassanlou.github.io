@@ -1,13 +1,41 @@
-module.exports = function(eleventyConfig) {
-    // Pass the images folder to the output
+const Image = require("@11ty/eleventy-img");
+const shell = require('shelljs');
+
+async function imageShortcode(src, alt, sizes) {
+  let metadata = await Image(src, {
+    widths: [30, 60],
+    formats: ["avif", "jpeg"]
+  });
+
+  let imageAttributes = {
+    alt,
+    sizes,
+    loading: "lazy",
+    decoding: "async",
+  }
+
+  shell.mkdir('-p', '_site/images'); // Create the directory if it doesn't exist already
+  shell.cp('images/*', '_site/images'); // Copy everything from images directory into _site/images
+
+  return Image.generateHTML(metadata, imageAttributes);
+}
+
+module.exports = function (eleventyConfig) {
+
     eleventyConfig.addPassthroughCopy("images");
+    eleventyConfig.addWatchTarget("images/");
+
+    eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode);
+    eleventyConfig.addLiquidShortcode("image", imageShortcode);
+    eleventyConfig.addJavaScriptFunction("image", imageShortcode);
 
     return {
         dir: {
-            input: "pages",          // Look for templates in the 'pages' directory
-            includes: "../_includes", // Look for includes in the '_includes' directory
-            output: "_site"          // Output generated HTML files to the '_site' directory
+            input: "pages",
+            includes: "../_includes",
+            output: "_site"
         },
-        templateFormats: ["njk", "html"] // Process files with the extensions 'njk' and 'html' as Nunjucks templates
+        templateFormats: ["njk", "html"]
     };
 };
+
