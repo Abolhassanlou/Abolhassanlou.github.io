@@ -3,7 +3,7 @@ const shell = require('shelljs');
 
 async function imageShortcode(src, alt, sizes) {
   let metadata = await Image(src, {
-    widths: [30, 60],
+    widths: [20, 40],
     formats: ["avif", "jpeg"]
   });
 
