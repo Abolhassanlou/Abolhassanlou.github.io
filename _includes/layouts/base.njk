@@ -78,7 +78,7 @@
 </head>
 <body>
     <header>
-        {% image "images/kochlogo.png", "HeimatKoch Logo", "(max-width: 40px) 100vw, 50vw" %}
+        <image  src="/images/kochlogo.png" alt="HeimatKoch Logo" width="60" height="60">
 
         <h1>HeimatKoch</h1>
     </header>
@@ -92,7 +92,7 @@
         </ul>
     </nav>
     <main>
-        {{ content | safe }}
+        {{ content |toc | safe }}
     </main>
     <footer>
         <p>&copy; 2024 HeimatKoch</p>
